@@ -1,5 +1,7 @@
 import { Access } from 'payload/config';
 import { CollectionConfig } from 'payload/types';
+import UserBuyPost from '../BML_Sinpay/UserBuyPost';
+import UsersPayAccess from './UsersPayAccess';
 
 const demoUserAccess: Access = ({ req: { user } }) => {
   // return false to deny a user
@@ -48,7 +50,22 @@ const Users: CollectionConfig = {
       type: 'text',
       // saveToJWT tells Payload to include the field data to the JSON web token used to authenticate users
       saveToJWT: true,
-    }
+    },
+    {
+      name: 'BuyPost',
+      label: 'Buy Post Access',
+      type: 'ui', // required
+      admin: {
+        position: 'sidebar',
+        components: {
+          // React component- Edit view.
+          Field: UserBuyPost,
+          // React component- Collection List views.
+          Cell: () => null,
+        }
+      }
+    },
+    ...UsersPayAccess,
   ],
 };
 

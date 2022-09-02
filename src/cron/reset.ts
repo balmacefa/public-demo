@@ -1,22 +1,22 @@
-import payload from 'payload';
-import path from 'path';
 import fs from 'fs';
-import { User } from '../payload-types';
 import { MongoClient } from 'mongodb';
+import path from 'path';
+import payload from 'payload';
+import { contactFormData } from '../data/forms/contactFormData';
+import { mailingListFormData } from '../data/forms/mailingListFormData';
 import { generateContactFormSubmission, generateMailingListSubmission } from '../data/forms/submissionGenerator';
+import { mainMenuData } from '../data/mainMenu/mainMenuData';
+import { caseStudiesData } from '../data/pages/caseStudiesData';
 import { homeData } from '../data/pages/homeData';
 import { homeDataDE } from '../data/pages/homeDataDE';
 import { homeDataES } from '../data/pages/homeDataES';
 import { videoSeriesData } from '../data/pages/videoSeriesData';
-import { caseStudiesData } from '../data/pages/caseStudiesData';
-import { contactFormData } from '../data/forms/contactFormData';
-import { mailingListFormData } from '../data/forms/mailingListFormData';
-import { generateTsInterfacesData } from '../data/posts/generateTsInterfacesData';
-import { whiteLabelAdminUIData } from '../data/posts/whiteLabelAdminUIData';
 import { buildWebsiteData } from '../data/posts/buildWebsiteData';
+import { futurePostData } from '../data/posts/futurePostData';
+import { generateTsInterfacesData } from '../data/posts/generateTsInterfacesData';
 import { introducingPayloadData } from '../data/posts/introducingPayloadData';
-import { futurePostData } from '../data/posts/futurePostData'
-import { mainMenuData } from '../data/mainMenu/mainMenuData';
+import { whiteLabelAdminUIData } from '../data/posts/whiteLabelAdminUIData';
+import { User } from '../payload-types';
 
 export async function seed() {
   try {
@@ -44,7 +44,7 @@ export async function reset() {
       fs.rmSync(path.resolve(__dirname, '../../media'), { recursive: true });
     }
 
-    await dropDB();
+    // await dropDB();
     await seedData();
     payload.logger.info(`Reset Complete.`);
   } catch (error) {
@@ -66,6 +66,15 @@ async function seedData() {
       name: 'Demo User',
       email: 'demo@payloadcms.com',
       password: 'demo',
+    },
+  });
+
+  const { id: demoUserId2 } = await payload.create<User>({
+    collection: 'users',
+    data: {
+      name: 'Admin User',
+      email: 'admin@admin.com',
+      password: 'admin',
     },
   });
 

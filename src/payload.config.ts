@@ -1,19 +1,19 @@
-import { buildConfig } from 'payload/config';
 import formBuilder from '@payloadcms/plugin-form-builder';
 import nestedDocs from '@payloadcms/plugin-nested-docs';
 import seo from '@payloadcms/plugin-seo';
-import path from 'path';
 import dotenv from 'dotenv';
+import path from 'path';
+import { buildConfig } from 'payload/config';
+import { Alerts } from './collections/Alerts';
 import Categories from './collections/Categories';
 import Media from './collections/Media';
+import Pages from './collections/Pages';
 import Posts from './collections/Posts';
 import Users from './collections/Users';
-import Pages from './collections/Pages';
-import MainMenu from './globals/MainMenu';
-import BeforeLogin from './components/BeforeLogin';
 import AfterDashboard from "./components/AfterDashboard";
-import { Alerts } from './collections/Alerts'
 import BeforeDashboard from './components/BeforeDashboard';
+import BeforeLogin from './components/BeforeLogin';
+import MainMenu from './globals/MainMenu';
 
 dotenv.config({
   path: path.resolve(__dirname, '../.env'),

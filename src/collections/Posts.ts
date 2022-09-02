@@ -1,8 +1,11 @@
+import _ from 'lodash';
 import { CollectionConfig } from 'payload/types';
 import Content from '../blocks/Content';
 import { Media } from '../blocks/Media';
 import MediaContent from '../blocks/MediaContent';
 import MediaSlider from '../blocks/MediaSlider';
+
+
 
 const Posts: CollectionConfig = {
   // the slug is used for naming the collection in the database and the APIs that are open. For example: api/posts/${id}
@@ -20,11 +23,16 @@ const Posts: CollectionConfig = {
     ],
   },
   access: {
-    read: ({ req: { user } }) => {
-
+    read: (argg: any) => {
+      const user = _.get(argg, 'req.user');
       // users who are authenticated will see all posts
       if (user) {
-        return true;
+        const posts = _.get(user, "users_pay_access.posts.pk_posts", false)
+        if (!_.isEmpty(posts)) {
+          return true;
+
+        }
+        return false;
       }
 
       // query publishDate to control when posts are visible to guests
@@ -43,22 +51,24 @@ const Posts: CollectionConfig = {
     },
   },
   // versioning with drafts enabled tells Payload to save documents to a separate collection in the database and allow publishing
-	versions: {
-		drafts: true,
-	},
+  versions: {
+    drafts: true,
+  },
   fields: [
     {
       name: 'title',
       type: 'text',
       // localized fields are stored as keyed objects to represent each locale listed in the payload.config.ts. For example: { en: 'English', es: 'Espanol', ...etc }
-			localized: true,
+      localized: true,
     },
     {
       name: 'author',
       type: 'relationship',
       relationTo: 'users',
       // defaultValues can use functions to return data to populate the create form and also when making POST requests the server will use the value or function to fill in any undefined fields before validation occurs
-      defaultValue: ({ user }) => (user.id),
+      defaultValue: ({ user }) => {
+        return (user.id)
+      },
     },
     {
       name: 'publishDate',
@@ -78,7 +88,7 @@ const Posts: CollectionConfig = {
         archived: { equals: false },
       },
       // allow selection of one or more categories
-			hasMany: true,
+      hasMany: true,
     },
     {
       name: 'layout',
